@@ -13,42 +13,38 @@ import frc.robot.Constants;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase;
 
 
 
 public class DriveTrain extends SubsystemBase {
   
-  SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel,MotorType.kBrushless);
+  SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
   SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
   SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
 
-  SparkBaseConfig sparkBaseConfig;
-
   MecanumDrive dDrive;
   XboxController m_stick;
+  
+  SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
 
-  int x = 2;
-
-  REVLibError revLibError;
-
-
-
-  /** Creates a new ExampleSubsystem. */
-  public DriveTrain() {
-    sparkBaseConfig.follow(Constants.kFrontRightChannel, true);
-    rearRight.setInverted(true);
-
-    revLibError.configure
-
-
+  public DriveTrain() {    
+    sparkMaxConfig
+      .inverted(true)
+      .idleMode(IdleMode.kBrake);
+    
+    frontLeft.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    rearLeft.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    frontRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    rearRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    
     dDrive = new MecanumDrive(frontLeft::set, rearLeft::set, frontRight::set, rearRight::set);
     dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
     // Drive at 45 degrees relative to the robot, at the speed given by the Y axis of the joystick, with no rotation.
     dDrive.drivePolar(-m_stick.getLeftY(), Rotation2d.fromDegrees(45), 0);
-
   }
 
   /**
@@ -65,7 +61,7 @@ public class DriveTrain extends SubsystemBase {
         });
   }
 
-  public void stopMotors(){
+  public void stopMotors() {
     frontLeft.set(0);
     frontRight.set(0);
     rearLeft.set(0);
