@@ -11,35 +11,45 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkBase;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 
 
 
 public class DriveTrain extends SubsystemBase {
   
-  SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
-  SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
-  SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
-  SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
+  TalonFX frontLeft = new TalonFX(Constants.kFrontLeftChannel);
+  TalonFX rearLeft = new TalonFX(Constants.kRearLeftChannel);
+  TalonFX frontRight = new TalonFX(Constants.kFrontRightChannel);
+  TalonFX rearRight = new TalonFX(Constants.kRearRightChannel);
 
   MecanumDrive dDrive;
   XboxController m_stick;
   
-  SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+  TalonFXConfiguration m_talonFXConfig = new TalonFXConfiguration();
+
+    
 
   public DriveTrain() {    
-    sparkMaxConfig
-      .inverted(true)
-      .idleMode(IdleMode.kBrake);
-    
-    frontLeft.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
-    rearLeft.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
-    frontRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
-    rearRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    TalonFXConfiguration frontLeftConfig = new TalonFXConfiguration();
+    TalonFXConfiguration rearLeftConfig = new TalonFXConfiguration();
+    TalonFXConfiguration frontRightConfig = new TalonFXConfiguration();
+    TalonFXConfiguration rearRightConfig = new TalonFXConfiguration();
+
+    // Set inversion using InvertedValue
+    frontLeftConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    rearLeftConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    frontRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    rearRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    // Apply the configurations to the TalonFX motors
+    frontLeft.getConfigurator().apply(frontLeftConfig);
+    rearLeft.getConfigurator().apply(rearLeftConfig);
+    frontRight.getConfigurator().apply(frontRightConfig);
+    rearRight.getConfigurator().apply(rearRightConfig);
     
     dDrive = new MecanumDrive(frontLeft::set, rearLeft::set, frontRight::set, rearRight::set);
     dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
