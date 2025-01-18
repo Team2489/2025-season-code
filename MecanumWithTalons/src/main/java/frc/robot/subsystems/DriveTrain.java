@@ -22,7 +22,7 @@ public class DriveTrain extends SubsystemBase {
   private final WPI_TalonSRX rearRightMotor;
 
   MecanumDrive dDrive;
-  XboxController m_stick;
+  XboxController m_stick = new XboxController(0);
 
 
   public DriveTrain() {
@@ -43,14 +43,13 @@ public class DriveTrain extends SubsystemBase {
     rearRightMotor.setNeutralMode(NeutralMode.Brake);
 
     dDrive = new MecanumDrive(frontLeftMotor::set, rearLeftMotor::set, frontRightMotor::set, rearRightMotor::set);
-    dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
-
+    
+    dDrive.driveCartesian(0, 0, 0);
   }
 
-  //public void drive(double ySpeed, double xSpeed, double zRotation) {
-  //  dDrive.driveCartesian(ySpeed, xSpeed, zRotation);
-//}
-
+public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
+  dDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+}
 
 public void stopMotors() {
   frontLeftMotor.set(ControlMode.PercentOutput, 0);
@@ -72,11 +71,7 @@ public void stopMotors() {
         });
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
+
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
     return false;
