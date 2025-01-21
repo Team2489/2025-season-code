@@ -4,13 +4,13 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
 import frc.robot.commands.DriveArcadeCustomized;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.driveTest;
 
 
 /**
@@ -29,6 +29,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     dDrive.setDefaultCommand(new DriveArcadeCustomized(dDrive, xboxController::getLeftY, xboxController::getRightX, 0.3, 0.2, 0.8, xboxController));
+    //dDrive.setDefaultCommand(new driveTest(dDrive, xboxController::getLeftY, xboxController::getLeftX));
   }
 
   /**
@@ -50,7 +51,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
+      return null;
+
         // An example command will be run in autonomous
-        return Autos.exampleAuto(dDrive);
+
   }
 }

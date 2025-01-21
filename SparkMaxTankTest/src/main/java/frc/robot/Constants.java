@@ -17,10 +17,10 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  public static final int kFrontLeftChannel = 2;
+  public static final int kFrontLeftChannel = 4;
   public static final int kRearLeftChannel = 3;
   public static final int kFrontRightChannel = 1;
-  public static final int kRearRightChannel = 0;
+  public static final int kRearRightChannel = 2;
 
   public static final int XBOX_CONTROLLER_PORT = 0;
   public static final int XBOX_CONTROLLER2_PORT = 1;

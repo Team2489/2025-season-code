@@ -13,46 +13,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
 
 
 public class DriveTrain extends SubsystemBase {
   
-  TalonFX frontLeft = new TalonFX(Constants.kFrontLeftChannel);
-  TalonFX rearLeft = new TalonFX(Constants.kRearLeftChannel);
-  TalonFX frontRight = new TalonFX(Constants.kFrontRightChannel);
-  TalonFX rearRight = new TalonFX(Constants.kRearRightChannel);
+  SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
+  SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
+  SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
+  SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
 
  // MecanumDrive dDrive;
   DifferentialDrive dDrive;
-  XboxController m_stick;
-  
-  TalonFXConfiguration m_talonFXConfig = new TalonFXConfiguration();
-
-    
 
   public DriveTrain() {    
-    TalonFXConfiguration frontLeftConfig = new TalonFXConfiguration();
-    TalonFXConfiguration rearLeftConfig = new TalonFXConfiguration();
-    TalonFXConfiguration frontRightConfig = new TalonFXConfiguration();
-    TalonFXConfiguration rearRightConfig = new TalonFXConfiguration();
-
-    // Set inversion using InvertedValue
-    frontLeftConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    rearLeftConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    frontRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    rearRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    // Apply the configurations to the TalonFX motors
-    frontLeft.getConfigurator().apply(frontLeftConfig);
-    rearLeft.getConfigurator().apply(rearLeftConfig);
-    frontRight.getConfigurator().apply(frontRightConfig);
-    rearRight.getConfigurator().apply(rearRightConfig);
-    
     // dDrive = new MecanumDrive(frontLeft::set, rearLeft::set, frontRight::set, rearRight::set);
     // dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
     // // Drive at 45 degrees relative to the robot, at the speed given by the Y axis of the joystick, with no rotation.
@@ -63,20 +42,25 @@ public class DriveTrain extends SubsystemBase {
     SparkMaxConfig rightFollowerConfig = new SparkMaxConfig();
 
     globalConfig
-      .smartCurrentLimit(80)
-      .idleMode(IdleMode.kBrake);
-    
-    rightLeaderConfig
-      .apply(globalConfig)
-      .inverted(true);
-    
-    leftFollowerConfig
-      .apply(globalConfig)
-      .follow(Constants.kFrontLeftChannel);
-    
-    rightFollowerConfig
-      .apply(globalConfig)
-      .follow(Constants.kFrontRightChannel);
+    .smartCurrentLimit(80)
+    .idleMode(IdleMode.kBrake);
+  
+  rightLeaderConfig
+    .apply(globalConfig)
+    .inverted(true);
+  
+  leftFollowerConfig
+    .apply(globalConfig)
+    .follow(Constants.kFrontLeftChannel);
+  
+  rightFollowerConfig
+    .apply(globalConfig)
+    .follow(Constants.kFrontRightChannel);
+
+    frontLeft.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    frontRight.configure(rightLeaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rearLeft.configure(leftFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rearRight.configure(rightFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     dDrive = new DifferentialDrive(frontLeft, frontRight);
     dDrive.arcadeDrive(0, 0);
@@ -84,6 +68,9 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void arcadeDriveCustomized(double speed, double rotation){
+
+    dDrive.feed();
+    dDrive.feedWatchdog();
     frontRight.set(rotation-speed);
     rearRight.set(rotation-speed);
     frontLeft.set(speed+rotation);
@@ -109,6 +96,9 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    dDrive.feed();
+    dDrive.feedWatchdog();
+
     // This method will be called once per scheduler run
   }
 

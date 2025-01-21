@@ -17,7 +17,7 @@ public class DriveArcadeCustomized extends Command {
   XboxController xboxController;
   double creepRotationLimit = 0.0;
   double creepLimit = 0.0;
-  double fastLimit =0.0;
+  double fastLimit = 0.0;
   
 
   public DriveArcadeCustomized(DriveTrain driveTrain, DoubleSupplier speed, DoubleSupplier rotation, double creepLimit, double creepRotationLimit, double fastLimit, XboxController xboxController) {
