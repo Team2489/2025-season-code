@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +20,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase;
 
 
-
 public class DriveTrain extends SubsystemBase {
   
   SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
@@ -26,7 +27,8 @@ public class DriveTrain extends SubsystemBase {
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
   SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
 
-  MecanumDrive dDrive;
+ // MecanumDrive dDrive;
+  DifferentialDrive dDrive;
   XboxController m_stick;
   
   SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
@@ -41,24 +43,41 @@ public class DriveTrain extends SubsystemBase {
     frontRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     rearRight.configure(sparkMaxConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
     
-    dDrive = new MecanumDrive(frontLeft::set, rearLeft::set, frontRight::set, rearRight::set);
-    dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
-    // Drive at 45 degrees relative to the robot, at the speed given by the Y axis of the joystick, with no rotation.
-    dDrive.drivePolar(-m_stick.getLeftY(), Rotation2d.fromDegrees(45), 0);
+    // dDrive = new MecanumDrive(frontLeft::set, rearLeft::set, frontRight::set, rearRight::set);
+    // dDrive.driveCartesian(-m_stick.getLeftY(), -m_stick.getLeftX(), -m_stick.getRightX());
+    // // Drive at 45 degrees relative to the robot, at the speed given by the Y axis of the joystick, with no rotation.
+    // dDrive.drivePolar(-m_stick.getLeftY(), Rotation2d.fromDegrees(45), 0);
+    SparkMaxConfig globalConfig = new SparkMaxConfig();
+    SparkMaxConfig rightLeaderConfig = new SparkMaxConfig();
+    SparkMaxConfig leftFollowerConfig = new SparkMaxConfig();
+    SparkMaxConfig rightFollowerConfig = new SparkMaxConfig();
+
+    globalConfig
+      .smartCurrentLimit(80)
+      .idleMode(IdleMode.kBrake);
+    
+    rightLeaderConfig
+      .apply(globalConfig)
+      .inverted(true);
+    
+    leftFollowerConfig
+      .apply(globalConfig)
+      .follow(Constants.kFrontLeftChannel);
+    
+    rightFollowerConfig
+      .apply(globalConfig)
+      .follow(Constants.kFrontRightChannel);
+
+    dDrive = new DifferentialDrive(frontLeft, frontRight);
+    dDrive.arcadeDrive(0, 0);
+    arcadeDriveCustomized(0, 0);
   }
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  public void arcadeDriveCustomized(double speed, double rotation){
+    frontRight.set(rotation-speed);
+    rearRight.set(rotation-speed);
+    frontLeft.set(speed+rotation);
+    rearLeft.set(speed+rotation);
   }
 
   public void stopMotors() {

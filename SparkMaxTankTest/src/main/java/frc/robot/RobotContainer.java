@@ -5,11 +5,13 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveArcadeCustomized;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +28,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    dDrive.setDefaultCommand(new DriveArcadeCustomized(dDrive, xboxController::getLeftY, xboxController::getRightX, 0.3, 0.2, 0.8, xboxController));
   }
 
   /**
@@ -38,9 +41,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-
-    
   }
 
   /**
