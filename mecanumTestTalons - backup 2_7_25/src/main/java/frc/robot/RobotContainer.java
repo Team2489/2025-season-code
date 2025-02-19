@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.AlignToAprilTag;
+import frc.robot.commands.AlignLimelightPID;
 import frc.robot.commands.Autos;
 import frc.robot.commands.MoveYForTime;
 import frc.robot.commands.driveMecanum;
@@ -49,13 +50,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
-
     new JoystickButton(xboxController, XboxController.Button.kB.value).whileTrue(new AlignToAprilTag(dDrive, limeLight));
     new JoystickButton(xboxController, XboxController.Button.kX.value).whileTrue(new MoveYForTime(dDrive, 0.5));
-
-
-    
+    new JoystickButton(xboxController, XboxController.Button.kA.value).whileTrue(new AlignLimelightPID(dDrive, limeLight));
   }
 
   /**
