@@ -25,6 +25,7 @@ public final class Constants {
   public static final int XBOX_CONTROLLER_PORT = 0;
   public static final int XBOX_CONTROLLER2_PORT = 1;
 
+  public static final double[] LIMELIGHT_PID_CONSTANTS = { 0.0, 0.0, 0.0 }; //kP, kI, kD -- Arbitrary constants needs PID tuning
   public static final double ALIGN_THRESHOLD = 2.0; 
   public static final double SPEED_MULTIPLIER = 0.1;
 }

@@ -16,36 +16,43 @@ public class LimeLight extends SubsystemBase {
   private final NetworkTable limelightTable;
   private final double alignThreshold = 2.0;
 
+  private String limStatus = "Limelight-";
+
+  public NetworkTableEntry tx = limelightTable.getEntry("tx");
+  public NetworkTableEntry ty = limelightTable.getEntry("ty");
+  public NetworkTableEntry ta = limelightTable.getEntry("ta");
+
 
   /** Creates a new LimeLight. */
-  public LimeLight() {
-    limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = limelightTable.getEntry("tx");
-    NetworkTableEntry ty = limelightTable.getEntry("ty");
-    NetworkTableEntry ta = limelightTable.getEntry("ta");
-    
+  public LimeLight(String orientation) {
+    netTable = NetworkTableInstance.getDefault().getTable("limelight-" + orientation);
+    update();
+    limStatus += orientation;
   }
 
-//   public void getTx() {
-//     NetworkTableEntry tx = limelightTable.getEntry("tx");
-//     SmartDashboard.putNumber("LimeLightX", tx.getDouble(0.0));
-// }
+  public String toString() {
+    return limStatus;
+  }
 
-// // Method to get vertical offset (ty) of the AprilTag
-// public void getTy() {
-//   NetworkTableEntry ty = limelightTable.getEntry("ty");
-//   SmartDashboard.putNumber("LimeLightX", ty.getDouble(0.0));
-// }
+  // ------ Setting up pipeline -------
+  public void set(int pipeline) {
+    setPipeline(pipeline);
+  }
 
-// // Method to get the area (ta) of the AprilTag
-// public void getTa() {
-//   NetworkTableEntry ta = limelightTable.getEntry("ta");
-//   SmartDashboard.putNumber("LimeLightX", ta.getDouble(0.0));
-// }
+  private void setPipeline(int pipeline) {
+    set("pipeline", pipeline);
+  }
+
+  // update tx, ty, ta limelight values constantly for network tables
+  public void update() {
+    getTx();
+    getTy();
+    getTa();
+  }
+
   public double getTx() {
     return limelightTable.getEntry("tx").getDouble(0.0);
   }
-
   public double getTa() {
     return limelightTable.getEntry("ta").getDouble(0.0);
   }
@@ -54,9 +61,11 @@ public class LimeLight extends SubsystemBase {
   }
   public boolean hasValidTarget() {
     double tv = limelightTable.getEntry("tv").getDouble(0.0);
-    return tv >= 1.0;
+    return tv = 1.0;
   }
-
+  public void set(String input, int input2) {
+    table.getEntry(input).setNumber(input2);
+  }
 
 
   @Override
