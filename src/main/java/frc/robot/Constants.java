@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -24,7 +29,14 @@ public final class Constants {
   public static final int kRearRightChannel = 3;
 
   public static final int kCoralIntake = 4;
-  public static final int kElevator = 5;
+
+  // Elevator constants
+  public static final int kElevatorUp = 5;
+  public static final int kElevatorDown = 6;
+  public static final double[] ELEVATOR_PID_CONSTANTS = { 0.0, 0.0, 0.0 }; // needs PID tuning
+  public static final double[] ELEVATOR_FEED_FORWARD_CONSTANTS = { 0.0, 0.0, 0.0, 0.0 }; // needs tuning
+  public static double kMaxVelocity = Meters.of(4).per(Second).in(MetersPerSecond);
+  public static double kMaxAcceleration = Meters.of(8).per(Second).per(Second).in(MetersPerSecondPerSecond);
 
   public static final int XBOX_CONTROLLER_PORT = 0;
   public static final int XBOX_CONTROLLER2_PORT = 1;

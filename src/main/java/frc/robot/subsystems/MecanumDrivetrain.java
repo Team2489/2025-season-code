@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.Constants;
 
@@ -21,6 +22,8 @@ public class MecanumDrivetrain extends SubsystemBase {
   SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
   SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
+
+  Rotation2d poseAngle = new Rotation2d(0);
 
  // MecanumDrive dDrive;
   MecanumDrive mDrive;
@@ -53,10 +56,15 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     mDrive = new MecanumDrive(frontLeft, frontRight, rearLeft, rearRight);
     mDrive.driveCartesian(0, 0, 0);
+    mDrive.drivePolar(0, poseAngle, 0);
   }
 
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+  }
+
+  public void drivePolar(double magnitude, Rotation2d angle, double zRotation) {
+    mDrive.drivePolar(magnitude, angle, zRotation);
   }
 
   public void stopMotors() {
