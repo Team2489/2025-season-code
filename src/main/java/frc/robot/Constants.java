@@ -22,6 +22,9 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  // sensor port
+  public static final int LINE_BREAKER_PORT = 0;
+
   // all arbitrary values
   public static final int kFrontLeftChannel = 0;
   public static final int kRearLeftChannel = 2;
