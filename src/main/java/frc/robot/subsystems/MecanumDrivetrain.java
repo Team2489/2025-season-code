@@ -56,7 +56,7 @@ public class MecanumDrivetrain extends SubsystemBase {
 
     mDrive = new MecanumDrive(frontLeft, frontRight, rearLeft, rearRight);
     mDrive.driveCartesian(0, 0, 0);
-    mDrive.drivePolar(0, poseAngle, 0);
+    //mDrive.drivePolar(0, poseAngle, 0);
   }
 
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
@@ -73,6 +73,13 @@ public class MecanumDrivetrain extends SubsystemBase {
     rearLeft.set(0);
     rearRight.set(0);
   }
+
+  public void setMotors(double frontLeftSpeed, double frontRightSpeed, double rearLeftSpeed, double rearRightSpeed) {
+    frontLeft.set(frontLeftSpeed);
+    frontRight.set(frontRightSpeed);
+    rearLeft.set(rearLeftSpeed);
+    rearRight.set(rearRightSpeed);
+  } 
 
   @Override
   public void periodic() {
