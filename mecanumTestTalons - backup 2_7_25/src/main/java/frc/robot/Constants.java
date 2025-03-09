@@ -27,4 +27,13 @@ public final class Constants {
 
   public static final double ALIGN_THRESHOLD = 2.0; 
   public static final double SPEED_MULTIPLIER = 0.1;
+
+  public static final double LIMELIGHT_HEIGHT = 0.1; 
+  public static final double LIMELIGHT_ANGLE = 0.0;
+  
+	public static final double WHEEL_DIAMETER = 4;
+	public static final double PULSE_PER_REVOLUTION = 360;
+	public static final double ENCODER_GEAR_RATIO = 0;
+	public static final double GEAR_RATIO = 8.45 / 1;
+	public static final double FUDGE_FACTOR = 1.0;
 }

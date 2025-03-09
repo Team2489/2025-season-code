@@ -4,25 +4,21 @@
 
 package frc.robot;
 
+import frc.robot.commands.A_Center;
+import frc.robot.commands.A_RightL4;
+import frc.robot.commands.A_LeftL4;
 import frc.robot.commands.AlignToAprilTag;
-import frc.robot.commands.Autos;
+import frc.robot.commands.AprilTagNewAlignment;
 import frc.robot.commands.MoveYForTime;
 import frc.robot.commands.driveMecanum;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
 
   XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
@@ -30,42 +26,27 @@ public class RobotContainer {
   DriveTrain dDrive = new DriveTrain();
   LimeLight limeLight = new LimeLight();
 
-  // private boolean limelightValidTarget = false;
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  SendableChooser<Command> chooser = new SendableChooser<>();
+
+  A_Center a_Center = new A_Center(dDrive);
+  A_RightL4 a_RightL4 = new A_RightL4(dDrive);
+  A_LeftL4 a_Left4 = new A_LeftL4(dDrive);
+
   public RobotContainer() {
-    // Configure the trigger bindings
     configureBindings();
 
     dDrive.setDefaultCommand(new driveMecanum(dDrive, xboxController));
+    chooser.setDefaultOption("Auton Center", a_Center);
+    SmartDashboard.putData(chooser);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
-
-
     new JoystickButton(xboxController, XboxController.Button.kB.value).whileTrue(new AlignToAprilTag(dDrive, limeLight));
     new JoystickButton(xboxController, XboxController.Button.kX.value).whileTrue(new MoveYForTime(dDrive, 0.5));
-
-
-    
+    // new JoystickButton(xboxController, XboxController.Button.kY.value).whileTrue(new AprilTagNewAlignment(dDrive, limeLight));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-
-        // An example command will be run in autonomous
-        return Autos.exampleAuto(dDrive);
+        return chooser.getSelected();
   }
 }
