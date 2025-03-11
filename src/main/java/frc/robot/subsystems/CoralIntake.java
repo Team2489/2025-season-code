@@ -22,7 +22,7 @@ public class CoralIntake extends SubsystemBase {
     SparkMaxConfig coralIntakeConfig = new SparkMaxConfig();
 
     coralIntakeConfig
-      .smartCurrentLimit(80)
+      .smartCurrentLimit(40)
       .idleMode(IdleMode.kBrake);
 
     coralIntake.configure(coralIntakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

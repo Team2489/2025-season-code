@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MecanumDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DriveMecanum extends Command {
+public class DriveMecanumCartesian extends Command {
   MecanumDrivetrain mDrive;
   double xSpeed;
   double ySpeed;
   double zRotation;
 
-  public DriveMecanum(MecanumDrivetrain mDrive, double xSpeed, double ySpeed, double zRotation) {
+  public DriveMecanumCartesian(MecanumDrivetrain mDrive, double xSpeed, double ySpeed, double zRotation) {
     this.mDrive = mDrive;
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;

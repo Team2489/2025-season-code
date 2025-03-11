@@ -4,23 +4,23 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.ReefScorePositions.ElevatorReefPositions;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.subsystems.MecanumDrivetrain;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.Elevator;
-
+import frc.robot.commands.DriveMecanumCartesian;
 import frc.robot.commands.IntakeIn;
 import frc.robot.commands.IntakeOut;
+import frc.robot.commands.MecanumPolarCustomized;
+import frc.robot.commands.ScoreLevelHeight;
 
 public class RobotContainer {
   XboxController xboxController = new XboxController(Constants.XBOX_CONTROLLER_PORT);
@@ -30,18 +30,25 @@ public class RobotContainer {
   CoralIntake coralIntake = new CoralIntake();
   Elevator elevator = new Elevator();
   DigitalInput digitalInput = new DigitalInput(Constants.LINE_BREAKER_PORT);
+  DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_PORT);
 
   SendableChooser<Command> chooser = new SendableChooser<>();
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  double intakeOutPower = 0.1;
+
   public RobotContainer() {
-    // Configure the trigger bindings
     configureBindings();
+    mDrive.setDefaultCommand(new DriveMecanumCartesian(mDrive, -xboxController.getLeftY(), -xboxController.getLeftX(), -xboxController.getRightX()));
+   // mDrive.setDefaultCommand(new MecanumPolarCustomized(mDrive, Math.hypot(xboxController.getRawAxis(0), xboxController.getRawAxis(1)),  Math.atan2(xboxController.getRawAxis(1), xboxController.getRawAxis(0)), xboxController.getRawAxis(2)));
   }
 
   private void configureBindings() {
-    new JoystickButton(xboxController, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, 1, digitalInput));
-    new JoystickButton(xboxController, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, 1));
+    new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, 1, digitalInput));
+    new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, 1));
+    new JoystickButton(xboxController2, Button.kA.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, limitSwitch, ElevatorReefPositions.L1.height, intakeOutPower));
+    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, limitSwitch, ElevatorReefPositions.L2.height, intakeOutPower));
+    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, limitSwitch, ElevatorReefPositions.L3.height, intakeOutPower));
+    new JoystickButton(xboxController2, Button.kB.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, limitSwitch, ElevatorReefPositions.L4.height, intakeOutPower));
   }
 
   /**

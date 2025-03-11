@@ -4,10 +4,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ReefScorePositions.ElevatorReefPositions;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
@@ -16,75 +17,127 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; // need it temporarily for PID tuning
 
 public class Elevator extends SubsystemBase {
-  SparkMax elevatorUpMotor = new SparkMax(Constants.kElevatorUp, MotorType.kBrushless);
-  SparkMax elevatorDownMotor = new SparkMax(Constants.kElevatorDown, MotorType.kBrushless);
-  SparkMaxConfig elevatorUpConfig;
-  SparkMaxConfig elevatorDownConfig;
-  RelativeEncoder e_UpEncoder = elevatorUpMotor.getEncoder();
-  RelativeEncoder e_DownEncoder = elevatorDownMotor.getEncoder();
+  SparkMax elevatorLeftMotor = new SparkMax(Constants.kElevatorLeft, MotorType.kBrushless);
+  SparkMax elevatorRightMotor = new SparkMax(Constants.kElevatorRight, MotorType.kBrushless);
+
+  RelativeEncoder eLRelativeEncoder, eRRelativeEncoder;
+  SparkMaxConfig elevatorLeftConfig, elevatorRightConfig;
+  SparkClosedLoopController leftClosedLoopController, rightClosedLoopControler;
 
   private double elevator_kP = Constants.ELEVATOR_PID_CONSTANTS[0];
   private double elevator_kI = Constants.ELEVATOR_PID_CONSTANTS[1];
   private double elevator_kD = Constants.ELEVATOR_PID_CONSTANTS[2];
 
-  private double elevator_kS = Constants.ELEVATOR_FEED_FORWARD_CONSTANTS[0];
-  private double elevator_kG = Constants.ELEVATOR_FEED_FORWARD_CONSTANTS[1];
-  private double elevator_kV = Constants.ELEVATOR_FEED_FORWARD_CONSTANTS[2];
-  private double elevator_kA = Constants.ELEVATOR_FEED_FORWARD_CONSTANTS[3];
+  PIDController e_PidController;
+  TrapezoidProfile.Constraints profConstraints;
+  TrapezoidProfile.State currentState;
+  TrapezoidProfile.State goalState;
+  TrapezoidProfile profile;
 
-  ProfiledPIDController e_PidController = new ProfiledPIDController(elevator_kP, elevator_kI, elevator_kD, new Constraints(Constants.kMaxVelocity, Constants.kMaxAcceleration));
+  boolean atBottom = false;
+  double setPosition = 0.0;
+  double currentPosition = 0.0;
 
-  ElevatorFeedforward e_Feedforward = new ElevatorFeedforward(elevator_kS, elevator_kG, elevator_kV, elevator_kA);
-
-  // set min and max elevator heights
-  // set up sysid routine and setup (we need this?)
-
+  DigitalInput limitSwitch;
 
   public Elevator() {
-    elevatorUpConfig = new SparkMaxConfig();
-    elevatorDownConfig = new SparkMaxConfig();
+    elevatorLeftConfig = new SparkMaxConfig();
+    elevatorRightConfig = new SparkMaxConfig();
 
-    elevatorUpConfig
-      .smartCurrentLimit(80)
-      .idleMode(IdleMode.kBrake);
-    
-    elevatorDownConfig
-      .apply(elevatorUpConfig)
-      .inverted(true);
+    leftClosedLoopController = elevatorLeftMotor.getClosedLoopController();
+    rightClosedLoopControler = elevatorRightMotor.getClosedLoopController();
 
-    // elevatorUpConfig.closedLoop
-    //   .pid(elevator_kP, elevator_kI, elevator_kD)
-    //   .outputRange(-0.75, 0.75)
-    //   .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    eLRelativeEncoder = elevatorLeftMotor.getEncoder();
+    eRRelativeEncoder = elevatorLeftMotor.getEncoder();
+
+    limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_PORT);
+
+    profConstraints = new TrapezoidProfile.Constraints(Constants.kMaxVelocity, Constants.kMaxAcceleration);
+    e_PidController = new PIDController(elevator_kP, elevator_kI, elevator_kD);
+    e_PidController.setTolerance(0.5);
+
+    elevatorRightConfig
+      .closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      .pidf(elevator_kP, elevator_kI, elevator_kD, elevator_kD)
+      .velocityFF(elevator_kD)
+      .outputRange(-Constants.kElevatorOutputRange, Constants.kElevatorOutputRange);
+
+    elevatorRightConfig
+      .smartCurrentLimit(40)
+      .voltageCompensation(12.0)
+      .idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(Constants.kElevatorCLRate).encoder
+      .positionConversionFactor(1)
+      .velocityConversionFactor(1);
     
-    // elevatorDownConfig.closedLoop
-    //   .pid(elevator_kP, elevator_kI, elevator_kD)
-    //   .outputRange(-0.75, 0.75)
-    //   .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+    elevatorLeftConfig.follow(elevatorRightMotor, true);
+
+    currentState = new TrapezoidProfile.State(0, 0);
+    goalState = new TrapezoidProfile.State(0, 0);
+    profile = new TrapezoidProfile(profConstraints);
     
-    elevatorUpMotor.configure(elevatorUpConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    elevatorDownMotor.configure(elevatorDownConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    elevatorLeftMotor.configure(elevatorLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    elevatorRightMotor.configure(elevatorRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void setElevatorPosition(double position) {
+    currentPosition = eRRelativeEncoder.getPosition();  
+    goalState = new TrapezoidProfile.State(position, 0);
+    double error = goalState.position - currentPosition;
     
+    // when limit switch is clicked
+    if (limitSwitch.get()) {
+      handleLimitSwitch();
+    }
+    // ONLY DO SET POSITION WHEN ELEVATOR POSITION IS RESET
+    if (atBottom) {
+      // double pidOutput = e_PidController.calculate(getElevatorPosition(), currentState.position);
+      // double ffValue = calculateFeedForward(currentState);
+      double power = error * elevator_kP;
+      elevatorRightMotor.set(power);
+      atBottom = false;
+    }
+    // make sure it doesn't go past max height
+    if (getElevatorPosition() > Constants.kElevatorMaxHeight) {
+      stop();
+    }
   }
+
+  public void handleLimitSwitch() {
+    stop();
+    eRRelativeEncoder.setPosition(ElevatorReefPositions.INIT.height);
+    atBottom = true;
+    setPosition = ElevatorReefPositions.INIT.height;
+    currentState = new TrapezoidProfile.State(ElevatorReefPositions.INIT.height, 0);
+    goalState = new TrapezoidProfile.State(ElevatorReefPositions.INIT.height, 0);
+    e_PidController.reset();
+  }
+
+  public double getElevatorPosition() {
+    return eRRelativeEncoder.getPosition();
+  }
+
+  public void setMotors(double leftPower, double rightPower) {
+    elevatorLeftMotor.set(leftPower);
+    elevatorRightMotor.set(rightPower);
+  }
+
+  // public double calculateFeedForward(TrapezoidProfile.State state) {
+  //   return Constants.ELEVATOR_FF_CONSTANTS[0] * Math.signum(state.velocity) + Constants.ELEVATOR_FF_CONSTANTS[1] + Constants.ELEVATOR_FF_CONSTANTS[2] * state.velocity;
+  // }
 
   public void stop() {
-    elevatorUpMotor.set(0);
-    elevatorDownMotor.set(0);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    elevatorLeftMotor.set(0);
+    elevatorRightMotor.set(0);
+    e_PidController.reset();
   }
 }
