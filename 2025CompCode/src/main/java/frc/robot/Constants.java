@@ -33,7 +33,7 @@ public final class Constants {
   public static final int kRearRightChannel = 2;
 
   public static final int kCoralIntake1 = 21;
-  public static final int kCoralIntake2 = 22; // arbitrary
+  public static final int kCoralIntake2 = 10; // arbitrary
 
   // Elevator constants
   public static final int kElevatorLeft = 11;

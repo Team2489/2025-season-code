@@ -8,9 +8,9 @@ public class ResetElevatorPosition extends Command {
   Elevator elevator;
   DigitalInput limitSwitch;
 
-  public ResetElevatorPosition(Elevator elevator) {
+  public ResetElevatorPosition(Elevator elevator, DigitalInput limitSwitch) {
     this.elevator = elevator;
-    //this.limitSwitch = limitSwitch;
+    this.limitSwitch = limitSwitch;
     addRequirements(elevator);
   }
 

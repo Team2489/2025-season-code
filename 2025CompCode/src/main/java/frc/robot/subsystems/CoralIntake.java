@@ -30,8 +30,8 @@ public class CoralIntake extends SubsystemBase {
   }
 
   public void intakeRun(double power) {
-    coralIntake1.set(power);
-    coralIntake2.set(-power);
+    coralIntake1.set(-power);
+    coralIntake2.set(power);
   }
 
   public void stop() {

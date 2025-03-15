@@ -12,7 +12,7 @@ public class IntakeIn extends Command {
   public IntakeIn(CoralIntake coralIntake, double power) {
     this.coralIntake = coralIntake;
     this.power = power;
-    this.digitalInput = digitalInput;
+   // this.digitalInput = digitalInput;
     addRequirements(coralIntake);
   }
 
@@ -23,11 +23,13 @@ public class IntakeIn extends Command {
 
   @Override
   public void execute() {
-    if (digitalInput.get()) {
-      coralIntake.stop();
-    } else {
-      coralIntake.intakeRun(power);
-    }
+    // if (digitalInput.get()) {
+    //   coralIntake.stop();
+    // } else {
+    //   coralIntake.intakeRun(power);
+    // }
+
+    coralIntake.intakeRun(-power);
   }
 
   @Override

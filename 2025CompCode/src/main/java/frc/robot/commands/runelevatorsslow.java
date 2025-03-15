@@ -31,7 +31,7 @@ public class runelevatorsslow extends Command {
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
     elevator.setMotors(-power, power);
-    if (!limitSwitch.get()) {
+    if (limitSwitch.get()) {
       elevator.setMotors(0, 0);
     }
   }

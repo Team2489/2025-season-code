@@ -245,7 +245,7 @@ public class Elevator extends SubsystemBase {
         double error = goalPosition - currentPosition;
 
         // Calculate PID output
-        double power = MathUtil.clamp(ePidController.calculate(currentPosition, goalPosition), -1.0, 1.0);
+        double power = MathUtil.clamp(ePidController.calculate(currentPosition, goalPosition), -0.5, 0.5);
 
         elevatorRightMotor.set(power);
         elevatorLeftMotor.set(-power);
