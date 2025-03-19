@@ -12,7 +12,7 @@ public final class Constants {
   }
 
   public static enum ElevatorReefPositions {
-    // all arbitrary heights
+    // all arbitrary heights, should ideally be at a position between two levels
     INIT(0.0),
     L1(5.0),
     L2(10.0),
@@ -49,6 +49,8 @@ public final class Constants {
   public static final double kElevatorCLRate = 0.3;
   public static final double kElevatorOutputRange = 1.0;
   public static final double kElevatorLength = 1; // need to measure, 31 inches extension from each level
+  public static final double kCountsPerRev = 42.0;
+  public static final double kCountsPerInch = 42.0; // arbitrary
 
   // Feed forward values
   public static final double kFF = 0.0;

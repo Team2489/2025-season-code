@@ -20,7 +20,6 @@ public class SetElevatorPosition extends Command {
   @Override
   public void execute() {
     elevator.setElevatorPosition(height);
-  
   }
 
   @Override

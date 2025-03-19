@@ -47,6 +47,7 @@ public class RobotContainer {
   //DigitalInput limitSwitch = new DigitalInput(Constants.LIMIT_SWITCH_PORT);
 
   double intakeOutPower = 0.1;
+  double elevatorDownPower = 0.2;
 
 
 
@@ -68,12 +69,12 @@ public class RobotContainer {
     new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn( coralIntake, -0.2));
     new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut( coralIntake, 0.2));
   //  new JoystickButton(xboxController2, Button.kY.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, ElevatorReefPositions.L4.height, intakeOutPower));
-    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, ElevatorReefPositions.L2.height, intakeOutPower, limitSwitch));
+    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, ElevatorReefPositions.L2.height, intakeOutPower, elevatorDownPower,  limitSwitch));
   //  new JoystickButton(xboxController2, Button.kY.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, ElevatorReefPositions.L3.height, intakeOutPower));
     //new JoystickButton(xboxController2, Button.kB.value).whileTrue(new ScoreLevelHeight(coralIntake, elevator, ElevatorReefPositions.L4.height, intakeOutPower));
-    new JoystickButton(xboxController, XboxController.Button.kY.value).whileTrue(new AlignToAprilTag(dDrive, limeLight));
-    new JoystickButton(xboxController, Button.kLeftBumper.value).whileTrue(new runelevatorsslow(elevator, 0.5, limitSwitch));
-    new JoystickButton(xboxController, Button.kRightBumper.value).whileTrue(new runelevatorsslow(elevator,-0.5, limitSwitch));
+   // new JoystickButton(xboxController, XboxController.Button.kY.value).whileTrue(new AlignToAprilTag(dDrive, limeLight));
+    new JoystickButton(xboxController, Button.kY.value).whileTrue(new runelevatorsslow(elevator, 0.5, limitSwitch));
+    new JoystickButton(xboxController, Button.kA.value).whileTrue(new runelevatorsslow(elevator,-0.5, limitSwitch));
 
   }
 
