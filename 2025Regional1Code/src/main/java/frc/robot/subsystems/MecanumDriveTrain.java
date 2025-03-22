@@ -17,7 +17,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 
 
-public class DriveTrain extends SubsystemBase {
+public class MecanumDriveTrain extends SubsystemBase {
   SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
   SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
@@ -27,7 +27,7 @@ public class DriveTrain extends SubsystemBase {
 
  // MecanumDrive dDrive;
   MecanumDrive mDrive;
-  public DriveTrain() {
+  public MecanumDriveTrain() {
     SparkMaxConfig frontLeftConfig = new SparkMaxConfig();
     SparkMaxConfig frontRightConfig = new SparkMaxConfig();
     SparkMaxConfig rearLeftConfig = new SparkMaxConfig();
@@ -56,16 +56,14 @@ public class DriveTrain extends SubsystemBase {
 
     mDrive = new MecanumDrive(frontLeft, frontRight, rearLeft, rearRight);
     mDrive.driveCartesian(0, 0, 0);
-    //mDrive.drivePolar(0, poseAngle, 0);
+
   }
 
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
-  public void drivePolar(double magnitude, Rotation2d angle, double zRotation) {
-    mDrive.drivePolar(magnitude, angle, zRotation);
-  }
+
 
   public void stopMotors() {
     frontLeft.set(0);

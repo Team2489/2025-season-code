@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.MecanumDriveTrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class driveMecanum extends Command {
-  DriveTrain mDrive;
+public class DriveMecanumCartesian extends Command {
+  MecanumDriveTrain mDrive;
   double xSpeed;
   double ySpeed;
   double zRotation;
 
-  public driveMecanum(DriveTrain mDrive, double xSpeed, double ySpeed, double zRotation) {
+  public DriveMecanumCartesian(MecanumDriveTrain mDrive, double xSpeed, double ySpeed, double zRotation) {
     this.mDrive = mDrive;
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;

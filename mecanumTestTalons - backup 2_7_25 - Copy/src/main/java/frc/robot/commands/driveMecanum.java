@@ -23,8 +23,20 @@ public class driveMecanum extends Command {
   @Override
   public void execute() {
       updateLimelightTracking();
+
+      double ySpeed = 0;
       double xSpeed = -controller.getLeftY();
-      double ySpeed = controller.getLeftX();
+
+      if (controller.getRightTriggerAxis() > 0) {
+        ySpeed = controller.getRightTriggerAxis();
+      }
+      if (controller.getLeftTriggerAxis() > 0) {
+        ySpeed = -(controller.getLeftTriggerAxis());
+      }
+
+
+      
+      // double ySpeed = controller.getLeftX();
       double zRotation = controller.getRightX();  
       boolean getA = false;      
 

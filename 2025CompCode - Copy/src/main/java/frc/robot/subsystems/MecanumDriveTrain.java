@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,55 +12,48 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 
-
-public class DriveTrain extends SubsystemBase {
+public class MecanumDriveTrain extends SubsystemBase {
   SparkMax frontLeft = new SparkMax(Constants.kFrontLeftChannel, MotorType.kBrushless);
   SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
   SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
 
-  Rotation2d poseAngle = new Rotation2d(0);
+  //Rotation2d poseAngle = new Rotation2d(0);
 
- // MecanumDrive dDrive;
+
   MecanumDrive mDrive;
-  public DriveTrain() {
+  public MecanumDriveTrain() {
     SparkMaxConfig frontLeftConfig = new SparkMaxConfig();
     SparkMaxConfig frontRightConfig = new SparkMaxConfig();
     SparkMaxConfig rearLeftConfig = new SparkMaxConfig();
     SparkMaxConfig rearRightConfig = new SparkMaxConfig();
 
-    frontLeftConfig // global config
+    frontLeftConfig
       .smartCurrentLimit(80)
       .idleMode(IdleMode.kBrake);
   
-    frontRightConfig // right leader
+    frontRightConfig
       .apply(frontLeftConfig)
       .inverted(true);
     
-    rearLeftConfig // left follower
-      .apply(frontLeftConfig)
-      .follow(Constants.kFrontLeftChannel);
+    rearLeftConfig
+      .apply(frontLeftConfig);
     
-    rearRightConfig // right follower
+    rearRightConfig
       .apply(frontLeftConfig)
-      .follow(Constants.kFrontRightChannel);
+      .inverted(true);
 
     frontLeft.configure(frontLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     frontRight.configure(frontRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rearLeft.configure(rearLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rearRight.configure(rearRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    mDrive = new MecanumDrive(frontLeft, frontRight, rearLeft, rearRight);
-    mDrive.driveCartesian(0, 0, 0);
-    //mDrive.drivePolar(0, poseAngle, 0);
+    mDrive = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
+
   }
 
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
     mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
-  }
-
-  public void drivePolar(double magnitude, Rotation2d angle, double zRotation) {
-    mDrive.drivePolar(magnitude, angle, zRotation);
   }
 
   public void stopMotors() {
@@ -74,15 +63,16 @@ public class DriveTrain extends SubsystemBase {
     rearRight.set(0);
   }
 
-  public void setMotors(double frontLeftSpeed, double frontRightSpeed, double rearLeftSpeed, double rearRightSpeed) {
-    frontLeft.set(frontLeftSpeed);
-    frontRight.set(frontRightSpeed);
-    rearLeft.set(rearLeftSpeed);
-    rearRight.set(rearRightSpeed);
-  } 
+  // public void setMotors(double frontLeftSpeed, double frontRightSpeed, double rearLeftSpeed, double rearRightSpeed) {
+  //   frontLeft.set(frontLeftSpeed);
+  //   frontRight.set(frontRightSpeed);
+  //   rearLeft.set(rearLeftSpeed);
+  //   rearRight.set(rearRightSpeed);
+  // } 
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
   }
 }
+

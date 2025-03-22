@@ -4,40 +4,42 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class driveMecanum extends Command {
-  DriveTrain mDrive;
-  double xSpeed;
-  double ySpeed;
-  double zRotation;
-
-  public driveMecanum(DriveTrain mDrive, double xSpeed, double ySpeed, double zRotation) {
-    this.mDrive = mDrive;
-    this.xSpeed = xSpeed;
-    this.ySpeed = ySpeed;
-    this.zRotation = zRotation;
+public class runelevatorsslow extends Command {
+  Elevator elevator;
+  double power;
+  DigitalInput limitSwitch;
+  public runelevatorsslow(Elevator elevator, double power, DigitalInput limitSwitch) {
+    this.elevator = elevator;
+    this.power = power;
+    this.limitSwitch = limitSwitch;
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mDrive.driveCartesian(0, 0, 0);
+    elevator.setMotors(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    mDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+    // elevator.setMotors(-0.75, 0.75);
+    elevator.setMotors(-power, power);
+    if (limitSwitch.get()) {
+      elevator.setMotors(0, 0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    mDrive.driveCartesian(0, 0, 0);
+    elevator.setMotors(0, 0);
   }
 
   // Returns true when the command should end.
