@@ -31,6 +31,7 @@ public class Elevator extends SubsystemBase {
 
     private double currentPosition = 0.0;
     private double goalPosition = 0.0;
+    private double countRotations = 0.0;
     private double countsPerInch = 42.0; // arbitrary
     private double countsPerRev = 42.0;
     private boolean atBottom = false;
@@ -81,18 +82,20 @@ public class Elevator extends SubsystemBase {
         elevatorRightMotor.configure(elevatorRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void setElevatorPosition(double position) {
-        currentPosition = getElevatorPosition() * Constants.kCountsPerRev / Constants.kCountsPerInch; // just multiply rev*inch/rev
-        goalPosition = position;
+    public void countRotations() {
+        System.out.println("Position in rotations: " + getElevatorPosition() * 24.8);
+    }
+
+    public void setElevatorPosition(double posInRot) {
+        currentPosition = getElevatorPosition();
+        goalPosition = posInRot;
         double error = 0.5 * (goalPosition - currentPosition);
 
-        elevatorRightMotor.set(error);
-        elevatorLeftMotor.set(-error);
-        atBottom = false;
-
-        // Prevent exceeding max height
-        if (getElevatorPosition() > Constants.kElevatorMaxHeight) {
+        if (getElevatorPosition() > Constants.kElevatorMaxHeightInRot) {
             stop();
+        } else {
+            elevatorRightMotor.set(error);
+            elevatorLeftMotor.set(-error);
         }
     }
 
@@ -103,12 +106,13 @@ public class Elevator extends SubsystemBase {
         atBottom = true;
         currentPosition = 0.0;
         goalPosition = 0.0;
+        countRotations = 0.0;
     }
 
     // returns double value in rotations/revolutions
     public double getElevatorPosition() {
         System.out.println("R: " + eRRelativeEncoder.getPosition() + "L: " + eLRelativeEncoder.getPosition());
-        return eRRelativeEncoder.getPosition();
+        return eRRelativeEncoder.getPosition(); //  shud we avg left right encoder position values
     }
 
     public void setMotors(double leftPower, double rightPower) {

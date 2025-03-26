@@ -34,7 +34,9 @@ public class RunElevatorDown extends Command {
       elevator.setMotors(-power, power);
     } else {
       elevator.stop();
+      elevator.handleLimitSwitch();
     }
+    elevator.countRotations();
   }
 
   // Called once the command ends or is interrupted.

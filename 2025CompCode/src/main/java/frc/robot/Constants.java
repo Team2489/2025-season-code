@@ -35,7 +35,7 @@ public final class Constants {
   public static final int kElevatorRight = 12;
   public static final double[] ELEVATOR_PID_CONSTANTS = { 0.10, 0.0, 0.0 }; // needs PID tuning
   
-  public static final double kElevatorMaxHeight = 75.0; // inches
+  public static final double kElevatorMaxHeightInRot = 135.545766; // inches 77-81.5
   public static final double kElevatorCLRate = 0.3;
   public static final double kElevatorOutputRange = 1.0;
   public static final double kCountsPerRev = 42.0 * (5 / 6) * 20;

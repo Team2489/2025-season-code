@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -30,7 +31,12 @@ public class RunElevatorUp extends Command {
   @Override
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
-    elevator.setMotors(power, -power);
+    if (elevator.getElevatorPosition() > Constants.kElevatorMaxHeightInRot) {
+      elevator.stop();
+    } else {
+      elevator.setMotors(power, -power);
+    }
+    elevator.countRotations();
     // if (!limitSwitch.get()) {
     //   elevator.setMotors(0, 0);
     // }
