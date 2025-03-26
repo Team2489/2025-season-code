@@ -30,7 +30,7 @@ public class RunElevatorUp extends Command {
   @Override
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
-    elevator.setMotors(-power, power);
+    elevator.setMotors(power, -power);
     // if (!limitSwitch.get()) {
     //   elevator.setMotors(0, 0);
     // }

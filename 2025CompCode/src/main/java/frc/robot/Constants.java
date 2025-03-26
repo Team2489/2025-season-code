@@ -53,6 +53,6 @@ public final class Constants {
   public static final double SPEED_MULTIPLIER = 0.1;
 
   public static final int LINE_BREAKER_PORT = 0;
-  public static final int LIMIT_SWITCH_PORT = 1;
+  public static final int LIMIT_SWITCH_PORT = 9;
 }
 

@@ -11,7 +11,7 @@ public class AlignToAprilTag extends Command {
     private final MecanumDriveTrain mDrive;
     private final LimeLight limeLight;
     private final double kVy = 0.3; 
-    private final double targetAreaThreshold = 3;
+    private final double targetAreaThreshold = Constants.ALIGN_THRESHOLD;
     private final double verticalAlignmentThreshold = -0.1; 
     private static final double YAW_THRESHOLD = 2.0;
     private static final double kP_YAW = 0.01;
@@ -48,7 +48,7 @@ public class AlignToAprilTag extends Command {
         double yawCorrection = 0;
         
         if (ta < targetAreaThreshold) {
-            xSpeed = Constants.SPEED_MULTIPLIER * (targetAreaThreshold - ta); 
+            xSpeed = Constants.SPEED_MULTIPLIER * (targetAreaThreshold - ta + 0.2); 
         }    
         
         if (ta < targetAreaThreshold && tx < 0) {

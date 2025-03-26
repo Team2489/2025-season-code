@@ -30,8 +30,9 @@ public class RunElevatorDown extends Command {
   @Override
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
-    elevator.setMotors(-power, power);
-    if (!limitSwitch.get()) {
+    if (limitSwitch.get()) {
+      elevator.setMotors(-power, power);
+    } else {
       elevator.stop();
     }
   }

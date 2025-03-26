@@ -28,8 +28,8 @@ public class DriveMecanumCartesian extends Command {
   @Override
   public void execute() {
     double xSpeed = -controller.getLeftY();
+    double ySpeed = controller.getLeftX();
     double zRotation = controller.getRightX();  
-    double ySpeed = 0;
     if (controller.getRightTriggerAxis() > 0) {
       ySpeed = controller.getRightTriggerAxis();
     }
