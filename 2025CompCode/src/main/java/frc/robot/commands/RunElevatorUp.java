@@ -31,10 +31,12 @@ public class RunElevatorUp extends Command {
   @Override
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
-    if (elevator.getElevatorPosition() > Constants.kElevatorMaxHeightInRot) {
-      elevator.stop();
+    if (elevator.getElevatorPosition() < Constants.kElevatorMaxHeightInRot) {
+      double pwr = (((Constants.kElevatorMaxHeightInRot - 10) < elevator.getElevatorPosition()) && ((elevator.getElevatorPosition()) < (Constants.kElevatorMaxHeightInRot))) ? 0.25 * power : power;
+      elevator.setMotors(pwr, -pwr);
     } else {
-      elevator.setMotors(power, -power);
+      elevator.stop();
+      System.out.println("stop");
     }
     elevator.countRotations();
     // if (!limitSwitch.get()) {

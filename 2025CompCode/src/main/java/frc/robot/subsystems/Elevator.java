@@ -83,7 +83,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void countRotations() {
-        System.out.println("Position in rotations: " + getElevatorPosition() * 24.8);
+        System.out.println("Position in rotations: " + getElevatorPosition());
     }
 
     public void setElevatorPosition(double posInRot) {
@@ -112,7 +112,7 @@ public class Elevator extends SubsystemBase {
     // returns double value in rotations/revolutions
     public double getElevatorPosition() {
         System.out.println("R: " + eRRelativeEncoder.getPosition() + "L: " + eLRelativeEncoder.getPosition());
-        return eRRelativeEncoder.getPosition(); //  shud we avg left right encoder position values
+        return (Math.abs(eRRelativeEncoder.getPosition()) + Math.abs(eLRelativeEncoder.getPosition())) / 2; //  shud we avg left right encoder position values
     }
 
     public void setMotors(double leftPower, double rightPower) {
@@ -123,6 +123,6 @@ public class Elevator extends SubsystemBase {
     public void stop() {
         elevatorLeftMotor.set(0);
         elevatorRightMotor.set(0);
-        ePidController.reset();
+//        ePidController.reset();
     }
 }

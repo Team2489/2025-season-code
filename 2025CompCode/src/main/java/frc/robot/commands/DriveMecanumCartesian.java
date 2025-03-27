@@ -29,7 +29,7 @@ public class DriveMecanumCartesian extends Command {
   public void execute() {
     double xSpeed = -controller.getLeftY();
     double ySpeed = controller.getLeftX();
-    double zRotation = controller.getRightX();  
+    double zRotation = controller.getRightX();
     if (controller.getRightTriggerAxis() > 0) {
       ySpeed = controller.getRightTriggerAxis();
     }
@@ -41,9 +41,10 @@ public class DriveMecanumCartesian extends Command {
   }
 
   public double linearDeadband(double raw, double deadband) {
-    if (Math.abs(raw)<deadband) return 0;
+    if (Math.abs(raw) < deadband)
+      return 0;
 
-    //return Math.signum(raw)*(Math.abs(raw)-deadband)/(1-deadband);
+    // return Math.signum(raw)*(Math.abs(raw)-deadband)/(1-deadband);
     return raw;
   }
 

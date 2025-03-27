@@ -31,7 +31,8 @@ public class RunElevatorDown extends Command {
   public void execute() {
     // elevator.setMotors(-0.75, 0.75);
     if (limitSwitch.get()) {
-      elevator.setMotors(-power, power);
+      double pwr = (elevator.getElevatorPosition() > 10) ? power : 0.25 * power;
+      elevator.setMotors(-pwr, pwr);
     } else {
       elevator.stop();
       elevator.handleLimitSwitch();

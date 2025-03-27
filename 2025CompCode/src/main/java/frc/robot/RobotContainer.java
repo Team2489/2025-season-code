@@ -15,6 +15,7 @@ import frc.robot.commands.MoveRight;
 import frc.robot.commands.AlignToAprilTag;
 import frc.robot.commands.DriveMecanumCartesian;
 import frc.robot.commands.IntakeIn;
+import frc.robot.commands.IntakeInDelay;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.LimeLight;
@@ -63,8 +64,10 @@ public class RobotContainer {
   // A_RightL4 a_RightL4 = new A_RightL4(dDrive, coralIntake, elevator, intakeOutPower);
   // A_LeftL4 a_Left4 = new A_LeftL4(dDrive, coralIntake, elevator, intakeOutPower);
 
-  double intakePower = 0.4;
-  double elevatorPower = 0.2;
+  double intakePower = -0.6;
+  double adjustPower = -0.8;
+  double outtakePower = -0.8;
+  double elevatorPower = 0.6;
 
   public RobotContainer() {
     configureBindings();
@@ -91,16 +94,19 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Xbox Controller 1 Bindings
-    new JoystickButton(xboxController, Button.kRightBumper.value).whileTrue(new ScoreReef(elevator, coralIntake, intakePower, limitSwitch)); // driver 1 will position and score, eliminates communication error
+    //new JoystickButton(xboxController, Button.kRightBumper.value).whileTrue(new ScoreReef(elevator, coralIntake, intakePower, limitSwitch)); // driver 1 will position and score, eliminates communication error
+    new JoystickButton(xboxController, Button.kRightBumper.value).whileTrue(new IntakeOut(coralIntake, outtakePower));
     new JoystickButton(xboxController, Button.kX.value).whileTrue(new AlignReefLeft(mDrive, limeLight));
     new JoystickButton(xboxController, Button.kB.value).whileTrue(new AlignReefRight(mDrive, limeLight));
+    new JoystickButton(xboxController, Button.kY.value).whileTrue(new AlignToAprilTag(mDrive, limeLight));
 
     // Xbox Controller 2 Bindings
     new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, intakePower, digitalInput));
-    new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, intakePower));
+   // new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, outtakePower));
     new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPosition(elevator, ElevatorReefPositions.L4.height));
     new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPosition(elevator, ElevatorReefPositions.L3.height));
     new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPosition(elevator, ElevatorReefPositions.L2.height));
+    new JoystickButton(xboxController2, Button.kA.value).whileTrue(new IntakeInDelay(coralIntake, adjustPower));
     new POVButton(xboxController2, 0).whileTrue(new RunElevatorUp(elevator, elevatorPower)); // up button, going up
     new POVButton(xboxController2, 180).whileTrue(new RunElevatorDown(elevator, elevatorPower, limitSwitch)); // down button, going down
   }

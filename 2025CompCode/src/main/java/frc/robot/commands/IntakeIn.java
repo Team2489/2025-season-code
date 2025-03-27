@@ -12,7 +12,7 @@ public class IntakeIn extends Command {
   public IntakeIn(CoralIntake coralIntake, double power, DigitalInput digitalInput) {
     this.coralIntake = coralIntake;
     this.power = power;
-   // this.digitalInput = digitalInput;
+    this.digitalInput = digitalInput;
     addRequirements(coralIntake);
   }
 
