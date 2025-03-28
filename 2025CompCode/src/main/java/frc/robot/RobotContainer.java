@@ -61,7 +61,7 @@ public class RobotContainer {
 
   SendableChooser<Command> chooser = new SendableChooser<>();
 
-  A_Center a_Center = new A_Center(mDrive);
+  A_Center a_Center = new A_Center(mDrive, elevator, coralIntake);
   A_Taxi a_Taxi = new A_Taxi(mDrive);
   // A_RightL4 a_RightL4 = new A_RightL4(dDrive, coralIntake, elevator, intakeOutPower);
   // A_LeftL4 a_Left4 = new A_LeftL4(dDrive, coralIntake, elevator, intakeOutPower);
@@ -104,10 +104,10 @@ public class RobotContainer {
 
     // Xbox Controller 2 Bindings
     new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, intakePower, digitalInput));
-   // new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, outtakePower));
-    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL4(elevator, ElevatorReefPositions.L4.height));
-    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL3(elevator, ElevatorReefPositions.L3.height));
-    new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPositionL2(elevator, ElevatorReefPositions.L2.height));
+    new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, -outtakePower));
+    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL4(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL3(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPositionL2(elevator, elevatorPower));
     new JoystickButton(xboxController2, Button.kA.value).whileTrue(new IntakeInDelay(coralIntake, adjustPower));
     new POVButton(xboxController2, 0).whileTrue(new RunElevatorUp(elevator, elevatorPower)); // up button, going up
     new POVButton(xboxController2, 180).whileTrue(new RunElevatorDown(elevator, elevatorPower, limitSwitch)); // down button, going down

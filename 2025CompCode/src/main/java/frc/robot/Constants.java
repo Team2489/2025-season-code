@@ -10,9 +10,9 @@ public final class Constants {
     // all arbitrary heights, should ideally be at a position between two levels
     INIT(0.0),
     L1(21.0),
-    L2(34.875),
-    L3(74.917),
-    L4(75.0);
+    L2(37.875),
+    L3(75.917),
+    L4(132.0);
 
     public final double height;
 
@@ -35,7 +35,7 @@ public final class Constants {
   public static final int kElevatorRight = 12;
   public static final double[] ELEVATOR_PID_CONSTANTS = { 0.10, 0.0, 0.0 }; // needs PID tuning
   
-  public static final double kElevatorMaxHeightInRot = 74.917; // inches 77-81.5 132.974
+  public static final double kElevatorMaxHeightInRot = 139.112; // inches 77-81.5 132.974
   public static final double kElevatorCLRate = 0.3;
   public static final double kElevatorOutputRange = 1.0;
   public static final double kCountsPerRev = 42.0 * (5 / 6) * 20;
