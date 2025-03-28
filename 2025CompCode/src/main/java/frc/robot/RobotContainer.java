@@ -105,9 +105,9 @@ public class RobotContainer {
     // Xbox Controller 2 Bindings
     new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, intakePower, digitalInput));
     new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, -outtakePower));
-    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL4(elevator, elevatorPower));
-    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL3(elevator, elevatorPower));
-    new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPositionL2(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPositionL4(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL3(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL2(elevator, elevatorPower));
     new JoystickButton(xboxController2, Button.kA.value).whileTrue(new IntakeInDelay(coralIntake, adjustPower));
     new POVButton(xboxController2, 0).whileTrue(new RunElevatorUp(elevator, elevatorPower)); // up button, going up
     new POVButton(xboxController2, 180).whileTrue(new RunElevatorDown(elevator, elevatorPower, limitSwitch)); // down button, going down
