@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -123,6 +122,5 @@ public class Elevator extends SubsystemBase {
     public void stop() {
         elevatorLeftMotor.set(0);
         elevatorRightMotor.set(0);
-//        ePidController.reset();
     }
 }

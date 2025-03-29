@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.ElevatorReefPositions;
-import frc.robot.subsystems.CoralIntake;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.MecanumDriveTrain;
 
 public class MoveLeft extends SequentialCommandGroup {

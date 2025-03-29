@@ -2,17 +2,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
-import frc.robot.Constants;
-
 
 public class ResetElevatorPosition extends Command {
   Elevator elevator;
+  double power;
   DigitalInput limitSwitch;
 
-  public ResetElevatorPosition(Elevator elevator, DigitalInput limitSwitch) {
+  public ResetElevatorPosition(Elevator elevator, double power, DigitalInput limitSwitch) {
     this.elevator = elevator;
+    this.power = power;
     this.limitSwitch = limitSwitch;
     addRequirements(elevator);
   }
@@ -24,9 +23,11 @@ public class ResetElevatorPosition extends Command {
 
   @Override
   public void execute() {
-    double elevatorPosition = 0.4 * (elevator.getElevatorPosition() * Constants.kCountsPerRev / Constants.kCountsPerInch);
-    elevator.setMotors(elevatorPosition, -elevatorPosition);
     if (limitSwitch.get()) {
+      double pwr = (elevator.getElevatorPosition() > 10) ? power : 0.25 * power;
+      elevator.setMotors(-pwr, pwr);
+    } else {
+      elevator.stop();
       elevator.handleLimitSwitch();
     }
   }

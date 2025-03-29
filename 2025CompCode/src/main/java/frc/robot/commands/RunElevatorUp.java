@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
@@ -30,18 +29,12 @@ public class RunElevatorUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // elevator.setMotors(-0.75, 0.75);
     if (elevator.getElevatorPosition() < Constants.kElevatorMaxHeightInRot) {
       double pwr = (((Constants.kElevatorMaxHeightInRot - 10) < elevator.getElevatorPosition()) && ((elevator.getElevatorPosition()) < (Constants.kElevatorMaxHeightInRot))) ? 0.25 * power : power;
       elevator.setMotors(pwr, -pwr);
     } else {
       elevator.stop();
-      System.out.println("stop");
     }
-    elevator.countRotations();
-    // if (!limitSwitch.get()) {
-    //   elevator.setMotors(0, 0);
-    // }
   }
 
   // Called once the command ends or is interrupted.
