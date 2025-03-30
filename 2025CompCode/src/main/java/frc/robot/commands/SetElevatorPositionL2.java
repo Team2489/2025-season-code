@@ -36,6 +36,11 @@ public class SetElevatorPositionL2 extends Command {
   @Override
   public void end(boolean interrupted) {
     elevator.setMotors(0, 0);
+    if (((ElevatorReefPositions.L2.height - 0.5) <= elevator.getElevatorPosition())) {
+      elevator.ledLightsGreen();
+    } else {
+      elevator.ledLightRed();
+    }
   }
 
   @Override

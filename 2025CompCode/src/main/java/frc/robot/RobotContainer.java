@@ -58,7 +58,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
     
-    mDrive.setDefaultCommand(new DriveMecanumCartesian(mDrive, xboxController, elevator));
+    mDrive.setDefaultCommand(new DriveMecanumCartesian(mDrive, xboxController));
     chooser.setDefaultOption("Auton Center L4", a_Center);
     chooser.addOption("Auton Taxi", a_Taxi);
     SmartDashboard.putData(chooser);

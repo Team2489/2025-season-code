@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase {
 
     // returns double value in rotations/revolutions
     public double getElevatorPosition() {
-        System.out.println("R: " + eRRelativeEncoder.getPosition() + "L: " + eLRelativeEncoder.getPosition());
+     //   System.out.println("R: " + eRRelativeEncoder.getPosition() + "L: " + eLRelativeEncoder.getPosition());
         return (Math.abs(eRRelativeEncoder.getPosition()) + Math.abs(eLRelativeEncoder.getPosition())) / 2; //  shud we avg left right encoder position values
     }
 
@@ -144,5 +144,50 @@ public class Elevator extends SubsystemBase {
     public void stop() {
         elevatorLeftMotor.set(0);
         elevatorRightMotor.set(0);
+    }
+
+    @Override
+    public void periodic() {
+        int height = (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition()) && (getElevatorPosition()) < (ElevatorReefPositions.L2.height)) ? 2 : (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 3 : (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 4 : 1;
+        //System.out.println("Height of robot: " + height);
+        switch (height) {
+          case 2:
+            if (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition())) {
+              ledLightsGreen();
+            } else {
+              ledLightRed();
+            }
+            break;
+          case 3:
+            if (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition())) {
+              ledLightsGreen();
+            } else {
+              ledLightRed();
+            }
+            break;
+          case 4:
+            if (((ElevatorReefPositions.L4.height - 0.5) <= getElevatorPosition())) {
+              ledLightsGreen();
+            } else {
+              ledLightRed();
+            }
+            break;
+          default:
+            if (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition())) {
+                ledLightsGreen();
+            } else if (getElevatorPosition() != 0) {
+                ledLightRed();
+            }
+            if (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition())) {
+                ledLightsGreen();
+            } else if (getElevatorPosition() != 0) {
+                ledLightRed();
+            }
+            if (((ElevatorReefPositions.L4.height - 0.5) <= getElevatorPosition())) {
+                ledLightsGreen();
+            } else if (getElevatorPosition() != 0) {
+                ledLightRed();
+            }
+        }
     }
 }

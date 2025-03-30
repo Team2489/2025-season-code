@@ -14,13 +14,11 @@ import frc.robot.subsystems.MecanumDriveTrain;
 public class DriveMecanumCartesian extends Command {
   private final MecanumDriveTrain mDrive;
   private final XboxController controller;
-  private final Elevator elevator;
 
-  public DriveMecanumCartesian(MecanumDriveTrain mDrive, XboxController controller, Elevator elevator) {
+  public DriveMecanumCartesian(MecanumDriveTrain mDrive, XboxController controller) {
     this.mDrive = mDrive;
     this.controller = controller;
-    this.elevator = elevator;
-    addRequirements(mDrive, elevator);
+    addRequirements(mDrive);
   }
 
   @Override
@@ -50,13 +48,7 @@ public class DriveMecanumCartesian extends Command {
     }
 
     if ((angle != 0) || (angle != (Math.PI / 2))) {
-      mDrive.oppCornerMotors(upLeftDownRightPower, upRightDownLeftPower);
-    }
-    
-    if (((elevator.getElevatorPosition() - 0.5) > elevator.getElevatorPosition())) {
-      elevator.ledLightsGreen();
-    } else {
-      elevator.ledLightRed();
+      mDrive.oppCornerMotors(linearDeadband(upLeftDownRightPower, 0.1), linearDeadband(upRightDownLeftPower, 0.1));
     }
 
     mDrive.driveCartesian(linearDeadband(xSpeed, 0.1), linearDeadband(ySpeed, 0.1), linearDeadband(zRotation, 0.1));
