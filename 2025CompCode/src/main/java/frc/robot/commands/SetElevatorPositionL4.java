@@ -26,6 +26,11 @@ public class SetElevatorPositionL4 extends Command {
     } else {
       elevator.stop();
     }
+    if (((ElevatorReefPositions.L4.height - 0.5) < elevator.getElevatorPosition())) {
+      elevator.ledLightsGreen();
+    } else {
+      elevator.ledLightRed();
+    }
   }
 
   @Override

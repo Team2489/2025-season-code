@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorReefPositions;
@@ -19,6 +20,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 public class Elevator extends SubsystemBase {
     private final SparkMax elevatorLeftMotor = new SparkMax(Constants.kElevatorLeft, MotorType.kBrushless);
     private final SparkMax elevatorRightMotor = new SparkMax(Constants.kElevatorRight, MotorType.kBrushless);
+
+    private final PWMSparkMax ledLights;
 
     private final RelativeEncoder eLRelativeEncoder;
     private final RelativeEncoder eRRelativeEncoder;
@@ -39,6 +42,8 @@ public class Elevator extends SubsystemBase {
         // Initialize motor controllers
         SparkMaxConfig elevatorLeftConfig = new SparkMaxConfig();
         SparkMaxConfig elevatorRightConfig = new SparkMaxConfig();
+
+        ledLights = new PWMSparkMax(Constants.LED_LIGHT_PWM_PORT);
 
         leftClosedLoopController = elevatorLeftMotor.getClosedLoopController();
         rightClosedLoopController = elevatorRightMotor.getClosedLoopController();
@@ -106,6 +111,7 @@ public class Elevator extends SubsystemBase {
         currentPosition = 0.0;
         goalPosition = 0.0;
         countRotations = 0.0;
+        ledLights.set(-0.45);
     }
 
     // returns double value in rotations/revolutions
@@ -117,6 +123,22 @@ public class Elevator extends SubsystemBase {
     public void setMotors(double leftPower, double rightPower) {
         elevatorLeftMotor.set(leftPower);
         elevatorRightMotor.set(rightPower);
+    }
+
+    public void ledLightsOn() {
+        ledLights.set(-0.45);
+    }
+
+    public void ledLightsOff() {
+        ledLights.set(0.00);
+    }
+
+    public void ledLightRed() {
+        ledLights.set(0.61);
+    }
+
+    public void ledLightsGreen() {
+        ledLights.set(0.77);
     }
 
     public void stop() {

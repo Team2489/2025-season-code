@@ -5,16 +5,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorReefPositions;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.MecanumDriveTrain;
 
 public class DriveMecanumCartesian extends Command {
   private final MecanumDriveTrain mDrive;
   private final XboxController controller;
+  private final Elevator elevator;
 
-  public DriveMecanumCartesian(MecanumDriveTrain mDrive, XboxController controller) {
+  public DriveMecanumCartesian(MecanumDriveTrain mDrive, XboxController controller, Elevator elevator) {
     this.mDrive = mDrive;
     this.controller = controller;
-    addRequirements(mDrive);
+    this.elevator = elevator;
+    addRequirements(mDrive, elevator);
   }
 
   @Override
@@ -29,10 +33,16 @@ public class DriveMecanumCartesian extends Command {
     double ySpeed = controller.getLeftX();
     double zRotation = controller.getRightX();
     if (controller.getRightTriggerAxis() > 0) {
-      ySpeed = controller.getRightTriggerAxis();
+      ySpeed = 0.5 * controller.getRightTriggerAxis();
     }
     if (controller.getLeftTriggerAxis() > 0) {
-      ySpeed = -controller.getLeftTriggerAxis();
+      ySpeed = 0.5 * -controller.getLeftTriggerAxis();
+    }
+    
+    if (((elevator.getElevatorPosition() - 0.5) > elevator.getElevatorPosition())) {
+      elevator.ledLightsGreen();
+    } else {
+      elevator.ledLightRed();
     }
 
     mDrive.driveCartesian(linearDeadband(xSpeed, 0.1), linearDeadband(ySpeed, 0.1), linearDeadband(zRotation, 0.1));

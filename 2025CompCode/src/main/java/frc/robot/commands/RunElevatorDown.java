@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorReefPositions;
 import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -24,12 +25,16 @@ public class RunElevatorDown extends Command {
   @Override
   public void initialize() {
     elevator.setMotors(0, 0);
+    if (((elevator.getElevatorPosition() - 0.5) < elevator.getElevatorPosition())) {
+      elevator.ledLightsGreen();
+    } else {
+      elevator.ledLightRed();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // elevator.setMotors(-0.75, 0.75);
     if (limitSwitch.get()) {
       double pwr = (elevator.getElevatorPosition() > 10) ? power : 0.25 * power;
       elevator.setMotors(-pwr, pwr);
@@ -37,7 +42,11 @@ public class RunElevatorDown extends Command {
       elevator.stop();
       elevator.handleLimitSwitch();
     }
-    elevator.countRotations();
+    if (((elevator.getElevatorPosition() - 0.5) > elevator.getElevatorPosition())) {
+      elevator.ledLightsGreen();
+    } else {
+      elevator.ledLightRed();
+    }
   }
 
   // Called once the command ends or is interrupted.

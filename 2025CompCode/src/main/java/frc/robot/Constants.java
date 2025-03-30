@@ -52,6 +52,8 @@ public final class Constants {
   public static final double ALIGN_THRESHOLD = 2.0; 
   public static final double SPEED_MULTIPLIER = 0.1;
 
+  public static final int LED_LIGHT_PWM_PORT = 0;
+
   public static final int LINE_BREAKER_PORT = 6;
   public static final int LIMIT_SWITCH_PORT = 9;
 }

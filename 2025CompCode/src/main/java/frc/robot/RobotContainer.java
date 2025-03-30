@@ -53,12 +53,12 @@ public class RobotContainer {
   double intakePower = -0.55;
   double adjustPower = -0.7;
   double outtakePower = -0.7;
-  double elevatorPower = 0.75;
+  double elevatorPower = 0.73;
 
   public RobotContainer() {
     configureBindings();
     
-    mDrive.setDefaultCommand(new DriveMecanumCartesian(mDrive, xboxController));
+    mDrive.setDefaultCommand(new DriveMecanumCartesian(mDrive, xboxController, elevator));
     chooser.setDefaultOption("Auton Center L4", a_Center);
     chooser.addOption("Auton Taxi", a_Taxi);
     SmartDashboard.putData(chooser);
