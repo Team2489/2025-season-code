@@ -42,10 +42,36 @@ public class RunElevatorDown extends Command {
       elevator.stop();
       elevator.handleLimitSwitch();
     }
-    if (((elevator.getElevatorPosition() - 0.5) > elevator.getElevatorPosition())) {
-      elevator.ledLightsGreen();
-    } else {
-      elevator.ledLightRed();
+    // if (((elevator.getElevatorPosition() - 0.5) < elevator.getElevatorPosition())) {
+    //   elevator.ledLightsGreen();
+    // } else {
+    //   elevator.ledLightRed();
+    // }
+    int height = (((ElevatorReefPositions.L2.height - 0.5) < elevator.getElevatorPosition()) && ((elevator.getElevatorPosition()) < (ElevatorReefPositions.L2.height))) ? 2 : (((ElevatorReefPositions.L3.height - 0.5) < elevator.getElevatorPosition()) && ((elevator.getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 3 : (((ElevatorReefPositions.L3.height - 0.5) < elevator.getElevatorPosition()) && ((elevator.getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 4 : 1;
+    switch (height) {
+      case 2:
+        if (((ElevatorReefPositions.L2.height - 0.5) <= elevator.getElevatorPosition())) {
+          elevator.ledLightsGreen();
+        } else {
+          elevator.ledLightRed();
+        }
+        break;
+      case 3:
+        if (((ElevatorReefPositions.L3.height - 0.5) <= elevator.getElevatorPosition())) {
+          elevator.ledLightsGreen();
+        } else {
+          elevator.ledLightRed();
+        }
+        break;
+      case 4:
+        if (((ElevatorReefPositions.L4.height - 0.5) <= elevator.getElevatorPosition())) {
+          elevator.ledLightsGreen();
+        } else {
+          elevator.ledLightRed();
+        }
+        break;
+      default:
+        elevator.ledLightsOn();
     }
   }
 
