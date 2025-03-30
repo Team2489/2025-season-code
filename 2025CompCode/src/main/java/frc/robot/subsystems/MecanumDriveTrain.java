@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import frc.robot.Constants;
 
@@ -16,9 +17,6 @@ public class MecanumDriveTrain extends SubsystemBase {
   SparkMax rearLeft = new SparkMax(Constants.kRearLeftChannel, MotorType.kBrushless);
   SparkMax frontRight = new SparkMax(Constants.kFrontRightChannel, MotorType.kBrushless);
   SparkMax rearRight = new SparkMax(Constants.kRearRightChannel, MotorType.kBrushless);
-
-  //Rotation2d poseAngle = new Rotation2d(0);
-
 
   MecanumDrive mDrive;
   public MecanumDriveTrain() {
@@ -48,7 +46,6 @@ public class MecanumDriveTrain extends SubsystemBase {
     rearRight.configure(rearRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     mDrive = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
-
   }
 
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
@@ -62,12 +59,12 @@ public class MecanumDriveTrain extends SubsystemBase {
     rearRight.set(0);
   }
 
-  // public void setMotors(double frontLeftSpeed, double frontRightSpeed, double rearLeftSpeed, double rearRightSpeed) {
-  //   frontLeft.set(frontLeftSpeed);
-  //   frontRight.set(frontRightSpeed);
-  //   rearLeft.set(rearLeftSpeed);
-  //   rearRight.set(rearRightSpeed);
-  // } 
+  public void oppCornerMotors(double ADMotor, double BCMotor) {
+    frontLeft.set(ADMotor);
+    frontRight.set(BCMotor);
+    rearLeft.set(BCMotor);
+    rearRight.set(ADMotor);
+  }
 
   @Override
   public void periodic() {
