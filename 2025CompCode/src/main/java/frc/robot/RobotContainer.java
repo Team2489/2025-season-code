@@ -53,7 +53,8 @@ public class RobotContainer {
   double intakePower = -0.55;
   double adjustPower = -0.7;
   double outtakePower = -0.7;
-  double elevatorPower = 0.73;
+  double elevatorPower = 0.75;
+  double elevator23Power = 0.9;
 
   public RobotContainer() {
     configureBindings();
@@ -75,11 +76,11 @@ public class RobotContainer {
     new JoystickButton(xboxController2, Button.kRightBumper.value).whileTrue(new IntakeIn(coralIntake, intakePower, digitalInput));
     new JoystickButton(xboxController2, Button.kLeftBumper.value).whileTrue(new IntakeOut(coralIntake, -outtakePower));
     new JoystickButton(xboxController2, Button.kB.value).whileTrue(new SetElevatorPositionL4(elevator, elevatorPower));
-    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL3(elevator, elevatorPower));
-    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL2(elevator, elevatorPower));
+    new JoystickButton(xboxController2, Button.kY.value).whileTrue(new SetElevatorPositionL3(elevator, elevator23Power));
+    new JoystickButton(xboxController2, Button.kX.value).whileTrue(new SetElevatorPositionL2(elevator, elevator23Power));
     new JoystickButton(xboxController2, Button.kA.value).whileTrue(new IntakeInDelay(coralIntake, adjustPower));
     new POVButton(xboxController2, 0).whileTrue(new RunElevatorUp(elevator, elevatorPower)); // up button, going up
-    new POVButton(xboxController2, 180).whileTrue(new RunElevatorDown(elevator, elevatorPower, limitSwitch)); // down button, going down
+    new POVButton(xboxController2, 180).whileTrue(new RunElevatorDown(elevator, elevator23Power, limitSwitch)); // down button, going down
   }
 
   public Command getAutonomousCommand() {

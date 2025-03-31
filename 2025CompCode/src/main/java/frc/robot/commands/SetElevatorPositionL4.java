@@ -15,7 +15,7 @@ public class SetElevatorPositionL4 extends Command {
 
   @Override
   public void initialize() {
-    elevator.setMotors(0, 0);
+    elevator.setMotors(0.022, -0.022);
   }
 
   @Override
@@ -26,7 +26,7 @@ public class SetElevatorPositionL4 extends Command {
     } else {
       elevator.stop();
     }
-    if (((ElevatorReefPositions.L4.height - 0.5) <= elevator.getElevatorPosition())) {
+    if (((ElevatorReefPositions.L4.height - 1) <= elevator.getElevatorPosition())) {
       elevator.ledLightsGreen();
     } else {
       elevator.ledLightRed();
@@ -35,8 +35,8 @@ public class SetElevatorPositionL4 extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    elevator.setMotors(0, 0);
-    if (((ElevatorReefPositions.L4.height - 0.5) <= elevator.getElevatorPosition())) {
+    elevator.setMotors(0.022, -0.022);
+    if (((ElevatorReefPositions.L4.height - 1) <= elevator.getElevatorPosition())) {
       elevator.ledLightsGreen();
     } else {
       elevator.ledLightRed();

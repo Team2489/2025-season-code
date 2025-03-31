@@ -148,46 +148,47 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        int height = (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition()) && (getElevatorPosition()) < (ElevatorReefPositions.L2.height)) ? 2 : (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 3 : (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 4 : 1;
+        int height = (((ElevatorReefPositions.L2.height - 1) <= getElevatorPosition()) && (getElevatorPosition()) < (ElevatorReefPositions.L2.height)) ? 2 : (((ElevatorReefPositions.L3.height - 1) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 3 : (((ElevatorReefPositions.L3.height - 1) <= getElevatorPosition()) && ((getElevatorPosition()) < (ElevatorReefPositions.L3.height))) ? 4 : 1;
         //System.out.println("Height of robot: " + height);
         switch (height) {
           case 2:
-            if (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition())) {
+            if (((ElevatorReefPositions.L2.height - 1) <= getElevatorPosition())) {
               ledLightsGreen();
             } else {
               ledLightRed();
             }
             break;
           case 3:
-            if (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition())) {
+            if (((ElevatorReefPositions.L3.height - 1) <= getElevatorPosition())) {
               ledLightsGreen();
             } else {
               ledLightRed();
             }
             break;
           case 4:
-            if (((ElevatorReefPositions.L4.height - 0.5) <= getElevatorPosition())) {
+            if (((ElevatorReefPositions.L4.height - 1) <= getElevatorPosition())) {
               ledLightsGreen();
             } else {
               ledLightRed();
             }
             break;
           default:
-            if (((ElevatorReefPositions.L2.height - 0.5) <= getElevatorPosition())) {
-                ledLightsGreen();
-            } else if (getElevatorPosition() != 0) {
-                ledLightRed();
-            }
-            if (((ElevatorReefPositions.L3.height - 0.5) <= getElevatorPosition())) {
-                ledLightsGreen();
-            } else if (getElevatorPosition() != 0) {
-                ledLightRed();
-            }
-            if (((ElevatorReefPositions.L4.height - 0.5) <= getElevatorPosition())) {
-                ledLightsGreen();
-            } else if (getElevatorPosition() != 0) {
-                ledLightRed();
-            }
+            // if (((ElevatorReefPositions.L2.height - 1) <= getElevatorPosition())) {
+            //     ledLightsGreen();
+            // } else if (getElevatorPosition() != 0) {
+            //     ledLightRed();
+            // }
+            // if (((ElevatorReefPositions.L3.height - 1) <= getElevatorPosition())) {
+            //     ledLightsGreen();
+            // } else if (getElevatorPosition() != 0) {
+            //     ledLightRed();
+            // }
+            // if (((ElevatorReefPositions.L4.height - 1) <= getElevatorPosition())) {
+            //     ledLightsGreen();
+            // } else if (getElevatorPosition() != 0) {
+            //     ledLightRed();
+            // }
+            ledLightRed();
         }
     }
 }

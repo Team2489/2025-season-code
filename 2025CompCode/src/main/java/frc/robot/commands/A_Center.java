@@ -11,7 +11,7 @@ public class A_Center extends SequentialCommandGroup {
     addCommands(
       new A_DriveMec(driveTrain, 0.15, 0, 0).withTimeout(4.5),
       new SetElevatorPositionL4(elevator, 0.4).withTimeout(4.8),
-      new IntakeOut(coralIntake, -0.8).withTimeout(2),
+      new IntakeOut(coralIntake, -0.55).withTimeout(2),
       new ResetElevatorPosition(elevator, 0.6, limitSwitch)
     );
   }
